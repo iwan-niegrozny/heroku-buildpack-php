@@ -25,10 +25,10 @@ cp -a /tmp/usr/lib/* /app/local/lib
 export APACHE_MIRROR_HOST="http://www.apache.org/dist"
 # export APACHE_MIRROR_HOST="http://apache.mirrors.tds.net"
 
-# curl -L ftp://mcrypt.hellug.gr/pub/crypto/mcrypt/libmcrypt/libmcrypt-2.5.7.tar.gz -o /tmp/libmcrypt-2.5.7.tar.gz
-# curl -L ftp://ftp.andrew.cmu.edu/pub/cyrus-mail/cyrus-sasl-2.1.25.tar.gz -o /tmp/cyrus-sasl-2.1.25.tar.gz
+curl -L ftp://mcrypt.hellug.gr/pub/crypto/mcrypt/libmcrypt/libmcrypt-2.5.7.tar.gz -o /tmp/libmcrypt-2.5.7.tar.gz
+curl -L ftp://ftp.andrew.cmu.edu/pub/cyrus-mail/cyrus-sasl-2.1.25.tar.gz -o /tmp/cyrus-sasl-2.1.25.tar.gz
 echo "downloading libmemcached"
-curl -L https://launchpad.net/libmemcached/1.0/1.0.16/+download/libmemcached-1.0.16.tar.gz -o /tmp/libmemcached-1.0.16.tar.gz
+curl -L https://launchpad.net/libmemcached/1.0/1.0.18/+download/libmemcached-1.0.18.tar.gz -o /tmp/libmemcached-1.0.18.tar.gz
 echo "downloading PCRE"
 curl -L ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.32.tar.gz -o /tmp/pcre-8.32.tar.gz
 echo "downloading apr"
@@ -46,9 +46,9 @@ curl -L http://zlib.net/zlib-1.2.8.tar.gz -o /tmp/zlib-1.2.8.tar.gz
 # echo "downloading pecl zip extension"
 # curl -L http://pecl.php.net/get/zip-1.10.2.tgz -o /tmp/zip-1.10.2.tgz
 
-# tar -C /tmp -xzf /tmp/libmcrypt-2.5.7.tar.gz
-# tar -C /tmp -xzf /tmp/cyrus-sasl-2.1.25.tar.gz
-tar -C /tmp -xzf /tmp/libmemcached-1.0.16.tar.gz
+tar -C /tmp -xzf /tmp/libmcrypt-2.5.7.tar.gz
+tar -C /tmp -xzf /tmp/cyrus-sasl-2.1.25.tar.gz
+tar -C /tmp -xzf /tmp/libmemcached-1.0.18.tar.gz
 tar -C /tmp -xzf /tmp/pcre-8.32.tar.gz
 tar -C /tmp -xzf /tmp/httpd-2.4.7.tar.gz
 
@@ -71,9 +71,9 @@ export LD_LIBRARY_PATH="/app/local/lib"
 # export MAKE="/usr/bin/make $MAKEFLAGS"
 export MAKE="/usr/bin/make"
 
-# cd /tmp/libmcrypt-2.5.7
-# ./configure --prefix=/app/local --disable-posix-threads --enable-dynamic-loading --enable-static-link
-# ${MAKE} && ${MAKE} install
+cd /tmp/libmcrypt-2.5.7
+./configure --prefix=/app/local --disable-posix-threads --enable-dynamic-loading --enable-static-link
+${MAKE} && ${MAKE} install
 
 cd /tmp/zlib-1.2.8
 ./configure --prefix=/app/local --64
@@ -104,12 +104,12 @@ echo " " | /app/php/bin/pecl install memcache
 echo " " | /app/php/bin/pecl install apc-3.1.13
 /app/php/bin/pecl install igbinary
 
-# cd /tmp/cyrus-sasl-2.1.25
-# ./configure --prefix=/app/local
-# ${MAKE} && ${MAKE} install
-# export SASL_PATH=/app/local/lib/sasl2
+cd /tmp/cyrus-sasl-2.1.25
+./configure --prefix=/app/local
+${MAKE} && ${MAKE} install
+export SASL_PATH=/app/local/lib/sasl2
 
-cd /tmp/libmemcached-1.0.16
+cd /tmp/libmemcached-1.0.18
 ./configure --prefix=/app/local
 # the configure script detects sasl, but is still foobar'ed
 sed -i 's/LIBMEMCACHED_WITH_SASL_SUPPORT 0/LIBMEMCACHED_WITH_SASL_SUPPORT 1/' Makefile
@@ -122,7 +122,7 @@ cd /tmp/memcached-2.1.0
   --enable-memcached-igbinary \
   --enable-memcached-json \
   --with-php-config=/app/php/bin/php-config \
-  --enable-memcached-sasl \
+  --enable-memcached-sasl=yes \
   --enable-static
 ${MAKE} && ${MAKE} install
 
@@ -146,7 +146,7 @@ cp -aL /app/local/lib/libmemcached.so.11 /tmp/build/local/lib/
 cp -aL /app/local/lib/libpcre.so.1 /tmp/build/local/lib/
 # cp -aL /app/local/lib/libmemcachedprotocol.so.0 /tmp/build/local/lib/
 # cp -aL /app/local/lib/libmemcachedutil.so.2 /tmp/build/local/lib/
-# cp -aL /app/local/lib/sasl2/*.so.2 /tmp/build/local/lib/sasl2/
+cp -aL /app/local/lib/sasl2/*.so.2 /tmp/build/local/lib/sasl2/
 
 rm -rf /tmp/build/apache/manual/
 
