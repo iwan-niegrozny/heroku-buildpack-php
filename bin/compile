@@ -10,7 +10,7 @@ APACHE_PATH="apache"
 PHP_VERSION="5.5.9"
 PHP_PATH="php"
 BUILDPACK_VERSION="2.1-rc1"
-OPT_BUILDPACK_URL="http://vulcan-wlian.herokuapp.com/output/e33fbffa-c4ca-4752-8b1c-9ebc49366a1c"
+#OPT_BUILDPACK_URL="http://vulcan-wlian.herokuapp.com/output/e33fbffa-c4ca-4752-8b1c-9ebc49366a1c"
 
 BIN_DIR=$(dirname $0)
 BUILD_DIR=$1
@@ -33,6 +33,7 @@ if [ -f www/Procfile ]; then
   mv www/Procfile .
 fi
 
+echo "AHOJ MY FRIENDS"
 echo "-----> Extracting Apache $APACHE_VERSION PHP $PHP_VERSION build $BUILDPACK_VERSION"
 echo "-----> from $OPT_BUILDPACK_URL"
 curl --silent --max-time 60 --location "$OPT_BUILDPACK_URL" | tar xz
