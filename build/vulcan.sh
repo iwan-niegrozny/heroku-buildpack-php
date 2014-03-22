@@ -112,7 +112,7 @@ echo " " | /app/php/bin/pecl install apc-3.1.13
 cd /tmp/libmemcached-1.0.16
 ./configure --prefix=/app/local
 # the configure script detects sasl, but is still foobar'ed
-# sed -i 's/LIBMEMCACHED_WITH_SASL_SUPPORT 0/LIBMEMCACHED_WITH_SASL_SUPPORT 1/' Makefile
+sed -i 's/LIBMEMCACHED_WITH_SASL_SUPPORT 0/LIBMEMCACHED_WITH_SASL_SUPPORT 1/' Makefile
 ${MAKE} && ${MAKE} install
 
 cd /tmp/memcached-2.1.0
@@ -122,6 +122,7 @@ cd /tmp/memcached-2.1.0
   --enable-memcached-igbinary \
   --enable-memcached-json \
   --with-php-config=/app/php/bin/php-config \
+  --enable-memcached-sasl \
   --enable-static
 ${MAKE} && ${MAKE} install
 
