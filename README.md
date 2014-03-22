@@ -1,8 +1,10 @@
 Apache+PHP build pack 
 ========================
 
-Added SASL to libmemcached, and pecl-memcached
-ORGIN: git://github.com/winglian/heroku-buildpack-php.git
+Added SASL to libmemcached, and pecl-memcached to 
+
+Orgin: http://github.com/winglian/heroku-buildpack-php.git
+
 -------------
 
 This is a build pack bundling PHP and Apache for Heroku apps.
