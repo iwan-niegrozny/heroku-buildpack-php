@@ -40,7 +40,7 @@ curl -L ${APACHE_MIRROR_HOST}/httpd/httpd-2.4.7.tar.gz -o /tmp/httpd-2.4.7.tar.g
 echo "downloading php"
 curl -L http://us.php.net/get/php-5.5.9.tar.gz/from/us2.php.net/mirror -o /tmp/php-5.5.9.tar.gz
 echo "downloading pecl-memcached"
-curl -L http://pecl.php.net/get/memcached-2.1.0.tgz -o /tmp/memcached-2.1.0.tgz
+curl -L http://pecl.php.net/get/memcached-2.2.0RC1.tgz -o /tmp/memcached-2.2.0RC1.tgz
 echo "download zlib"
 curl -L http://zlib.net/zlib-1.2.8.tar.gz -o /tmp/zlib-1.2.8.tar.gz
 # echo "downloading pecl zip extension"
@@ -59,7 +59,7 @@ tar -C /tmp/httpd-2.4.7/srclib -xzf /tmp/apr-util-1.5.3.tar.gz
 mv /tmp/httpd-2.4.7/srclib/apr-util-1.5.3 /tmp/httpd-2.4.7/srclib/apr-util
 
 tar -C /tmp -xzf /tmp/php-5.5.9.tar.gz
-tar -C /tmp -xzf /tmp/memcached-2.1.0.tgz
+tar -C /tmp -xzf /tmp/memcached-2.2.0RC1.tgz
 tar -C /tmp -xzf /tmp/zlib-1.2.8.tar.gz
 # tar -C /tmp -xzf /tmp/zip-1.10.2.tgz
 
@@ -110,12 +110,12 @@ ${MAKE} && ${MAKE} install
 export SASL_PATH=/app/local/lib/sasl2
 
 cd /tmp/libmemcached-1.0.18
-./configure --prefix=/app/local
+./configure --prefix=/app/local --ac_enable_sasl=yes
 # the configure script detects sasl, but is still foobar'ed
-sed -i 's/LIBMEMCACHED_WITH_SASL_SUPPORT 0/LIBMEMCACHED_WITH_SASL_SUPPORT 1/' Makefile
+#sed -i 's/LIBMEMCACHED_WITH_SASL_SUPPORT 0/LIBMEMCACHED_WITH_SASL_SUPPORT 1/' Makefile
 ${MAKE} && ${MAKE} install
 
-cd /tmp/memcached-2.1.0
+cd /tmp/memcached-2.2.0RC1
 /app/php/bin/phpize
 ./configure --with-libmemcached-dir=/app/local \
   --prefix=/app/php \
