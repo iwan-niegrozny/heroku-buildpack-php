@@ -29,9 +29,9 @@ export APACHE_MIRROR_HOST="http://www.apache.org/dist"
 
 curl -L ftp://ftp.andrew.cmu.edu/pub/cyrus-mail/cyrus-sasl-2.1.25.tar.gz -o /tmp/cyrus-sasl-2.1.25.tar.gz
 echo "downloading libmemcached"
-curl -L https://launchpad.net/libmemcached/1.0/1.0.8/+download/libmemcached-1.0.8.tar.gz -o /tmp/libmemcached-1.0.8.tar.gz
+curl -L https://launchpad.net/libmemcached/1.0/1.0.16/+download/libmemcached-1.0.16.tar.gz -o /tmp/libmemcached-1.0.16.tar.gz
 echo "downloading PCRE"
-curl -L http://ftp.cs.stanford.edu/pub/exim/pcre/pcre-8.32.tar.gz -o /tmp/pcre-8.32.tar.gz
+curl -L http://ufpr.dl.sourceforge.net/project/pcre/pcre/8.32/pcre-8.32.tar.gz -o /tmp/pcre-8.32.tar.gz
 echo "downloading apr"
 curl -L ${APACHE_MIRROR_HOST}/apr/apr-1.5.0.tar.gz -o /tmp/apr-1.5.0.tar.gz
 echo "downloading apr-util"
@@ -49,7 +49,7 @@ curl -L http://zlib.net/zlib-1.2.8.tar.gz -o /tmp/zlib-1.2.8.tar.gz
 
 # tar -C /tmp -xzf /tmp/libmcrypt-2.5.7.tar.gz
 tar -C /tmp -xzf /tmp/cyrus-sasl-2.1.25.tar.gz
-tar -C /tmp -xzf /tmp/libmemcached-1.0.8.tar.gz
+tar -C /tmp -xzf /tmp/libmemcached-1.0.16.tar.gz
 tar -C /tmp -xzf /tmp/pcre-8.32.tar.gz
 tar -C /tmp -xzf /tmp/httpd-2.4.7.tar.gz
 
@@ -101,8 +101,8 @@ ${MAKE}
 ${MAKE} install
 
 /app/php/bin/pear config-set php_dir /app/php
-echo " " | /app/php/bin/pecl install memcache
-echo " " | /app/php/bin/pecl install apc-3.1.13
+#echo " " | /app/php/bin/pecl install memcache
+#echo " " | /app/php/bin/pecl install apc-3.1.13
 /app/php/bin/pecl install igbinary
 
 cd /tmp/cyrus-sasl-2.1.25
@@ -110,11 +110,9 @@ cd /tmp/cyrus-sasl-2.1.25
 ${MAKE} && ${MAKE} install
 export SASL_PATH=/app/local/lib/sasl2
 
-cd /tmp/libmemcached-1.0.8
+cd /tmp/libmemcached-1.0.16
 # the configure script detects sasl, but is still foobar'ed
-sed -i -e s/ax_cv_sasl/ac_enable_sasl/ m4/ax_sasl.m4
-sed -i -e "s/-pthread -pthreads/-lpthread -lpthreads/" m4/ax_pthread.m4
-./configure --prefix=/app/local
+./configure --prefix=/app/local --enable-sasl
 #sed -i 's/LIBMEMCACHED_WITH_SASL_SUPPORT 0/LIBMEMCACHED_WITH_SASL_SUPPORT 1/' Makefile
 ${MAKE} && ${MAKE} install
 
@@ -147,8 +145,8 @@ cp -a /app/php /tmp/build/
 cp -aL /app/local/lib/libmcrypt.so.4 /tmp/build/local/lib/
 cp -aL /app/local/lib/libmemcached.so.11 /tmp/build/local/lib/
 cp -aL /app/local/lib/libpcre.so.1 /tmp/build/local/lib/
-# cp -aL /app/local/lib/libmemcachedprotocol.so.0 /tmp/build/local/lib/
-# cp -aL /app/local/lib/libmemcachedutil.so.2 /tmp/build/local/lib/
+cp -aL /app/local/lib/libmemcachedprotocol.so.0 /tmp/build/local/lib/
+cp -aL /app/local/lib/libmemcachedutil.so.2 /tmp/build/local/lib/
 cp -aL /app/local/lib/sasl2/*.so.2 /tmp/build/local/lib/sasl2/
 
 rm -rf /tmp/build/apache/manual/
