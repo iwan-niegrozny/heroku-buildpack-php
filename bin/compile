@@ -10,7 +10,7 @@ APACHE_PATH="apache"
 PHP_VERSION="5.5.9"
 PHP_PATH="php"
 BUILDPACK_VERSION="2.3"
-OPT_BUILDPACK_URL="http://vulcan-iwan-niegrozny.herokuapp.com/output/1f1164c3-3a3b-4ac7-88a5-8d91b3e30c01"
+OPT_BUILDPACK_URL="http://vulcan-iwan-niegrozny.herokuapp.com/output/dee99e41-05da-46ba-a8a4-a0ec03de7969"
 
 BIN_DIR=$(dirname $0)
 BUILD_DIR=$1

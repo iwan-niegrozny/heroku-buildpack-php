@@ -27,9 +27,9 @@ cp -a /tmp/usr/lib/* /app/local/lib
 export APACHE_MIRROR_HOST="http://www.apache.org/dist"
 # export APACHE_MIRROR_HOST="http://apache.mirrors.tds.net"
 
-curl -L ftp://ftp.andrew.cmu.edu/pub/cyrus-mail/cyrus-sasl-2.1.25.tar.gz -o /tmp/cyrus-sasl-2.1.25.tar.gz
+curl -L http://ftp.andrew.cmu.edu/pub/cyrus-mail/cyrus-sasl-2.1.25.tar.gz -o /tmp/cyrus-sasl-2.1.25.tar.gz
 echo "downloading libmemcached"
-curl -L https://launchpad.net/libmemcached/1.0/1.0.16/+download/libmemcached-1.0.16.tar.gz -o /tmp/libmemcached-1.0.16.tar.gz
+curl -L https://launchpad.net/libmemcached/1.0/1.0.18/+download/libmemcached-1.0.18.tar.gz -o /tmp/libmemcached-1.0.18.tar.gz
 echo "downloading PCRE"
 curl -L http://ufpr.dl.sourceforge.net/project/pcre/pcre/8.32/pcre-8.32.tar.gz -o /tmp/pcre-8.32.tar.gz
 echo "downloading apr"
@@ -49,7 +49,7 @@ curl -L http://zlib.net/zlib-1.2.8.tar.gz -o /tmp/zlib-1.2.8.tar.gz
 
 # tar -C /tmp -xzf /tmp/libmcrypt-2.5.7.tar.gz
 tar -C /tmp -xzf /tmp/cyrus-sasl-2.1.25.tar.gz
-tar -C /tmp -xzf /tmp/libmemcached-1.0.16.tar.gz
+tar -C /tmp -xzf /tmp/libmemcached-1.0.18.tar.gz
 tar -C /tmp -xzf /tmp/pcre-8.32.tar.gz
 tar -C /tmp -xzf /tmp/httpd-2.4.7.tar.gz
 
@@ -108,12 +108,13 @@ ${MAKE} install
 cd /tmp/cyrus-sasl-2.1.25
 ./configure --prefix=/app/local
 ${MAKE} && ${MAKE} install
+
 export SASL_PATH=/app/local/lib/sasl2
 
-cd /tmp/libmemcached-1.0.16
+cd /tmp/libmemcached-1.0.18
 # the configure script detects sasl, but is still foobar'ed
-./configure --prefix=/app/local --enable-sasl
-#sed -i 's/LIBMEMCACHED_WITH_SASL_SUPPORT 0/LIBMEMCACHED_WITH_SASL_SUPPORT 1/' Makefile
+./configure --prefix=/app/local
+sed -i 's/LIBMEMCACHED_WITH_SASL_SUPPORT 0/LIBMEMCACHED_WITH_SASL_SUPPORT 1/' Makefile
 ${MAKE} && ${MAKE} install
 
 cd /tmp/memcached-2.1.0
