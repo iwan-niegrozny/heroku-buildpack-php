@@ -5,11 +5,11 @@
 set -e
 
 # config
-APACHE_VERSION="2.4.6"
+APACHE_VERSION="2.4.7"
 APACHE_PATH="apache"
-PHP_VERSION="5.5.4"
+PHP_VERSION="5.5.9"
 PHP_PATH="php"
-BUILDPACK_VERSION="2.1"
+BUILDPACK_VERSION="2.0-rc1"
 OPT_BUILDPACK_URL="http://vulcan-iwan-niegrozny.herokuapp.com/output/9ee2ac2d-f7b6-45b4-a27f-610f39bfa529"
 
 BIN_DIR=$(dirname $0)
@@ -33,27 +33,6 @@ if [ -f www/Procfile ]; then
   mv www/Procfile .
 fi
 
-
-function indent() {
-  c='s/^/       /'
-  case $(uname) in
-    Darwin) sed -l "$c";;
-    *)      sed -u "$c";;
-  esac
-}
-function check_md5() {
-SUMS_FILE="${BUNDLE_DIR}/${MANIFEST_FILE}"
-TARGET="$1"
-SUM=`cat "${SUMS_FILE}" | grep "${TARGET}" | cut -d ' ' -f 1`
-OUTPUT=`md5sum ${BUNDLE_DIR}/${TARGET} | cut -d ' ' -f 1`
-! [ "$SUM" = "$OUTPUT" ]
-}
-
-function download_url() {
-TARGET_URL="$1"
-curl -s -S -O -L -m 300 --connect-timeout 60 "$TARGET_URL"
-}
-
 echo "-----> Extracting Apache $APACHE_VERSION PHP $PHP_VERSION build $BUILDPACK_VERSION"
 echo "-----> from $OPT_BUILDPACK_URL"
 curl --silent --max-time 60 --location "$OPT_BUILDPACK_URL" | tar xz
@@ -63,25 +42,11 @@ cp $LP_DIR/conf/httpd.conf $APACHE_PATH/conf
 cp $LP_DIR/conf/php.ini php
 cp $LP_DIR/conf/php-fpm.conf $BUILD_DIR/php/etc/
 
-# copy mongo.so
-mkdir -p /app/php/lib/php/extensions/no-debug-non-zts-20121212/
-cp $LP_DIR/ext/mongo.so /app/php/lib/php/extensions/no-debug-non-zts-20121212/mongo.so
-
-ls /app/php/lib/php/extensions/no-debug-non-zts-20121212/
-
-echo "-----> INSTALLING MONGO via GEM"
-gem install mongo
-
-
 # make php available on bin wtih symbolic link, use relative path so it works when remounted
 mkdir bin
 cd bin
 ln -s ../php/bin/php php
 cd ..
-
-
-
-
 
 export LD_LIBRARY_PATH=$BUILD_DIR/local/lib
 export PATH=$PATH:$BUILD_DIR/bin
@@ -92,7 +57,7 @@ echo $slug_id > SLUG_ID
 echo "Creating Slug Identifier file with id: ${slug_id}"
 
 # Determine if an SSH bundle including ssh keys etc is included so we can access private composer repos
-# Create your bundle with
+# Create your bundle with 
 # tar -czv .ssh | openssl enc -out ssh_bundle_enc -e -k $SSH_BUNDLE_PASSWORD -aes-128-cbc
 # the bundle's config should include directives for
 # StrictHostKeyChecking no
@@ -147,8 +112,8 @@ chmod 0777 \$PHP_ERROR_LOG
 tail -F /app/apache/logs/error_log &
 tail -F /app/apache/logs/access_log &
 tail -F \$PHP_ERROR_LOG &
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/local/lib
-export PHP_INI_SCAN_DIR=/app/www
+export LD_LIBRARY_PATH=/app/local/lib
+# export PHP_INI_SCAN_DIR=/app/php
 
 # let's check for hook scripts
 if [ -d www/.heroku ]; then
@@ -164,29 +129,10 @@ echo "Launching apache"
 exec /app/apache/bin/httpd -DNO_DETACH
 EOF
 
-cat >>queue.sh <<EOF
-export PHP_ERROR_LOG=\`/app/php/bin/php -i | grep error_log | grep -v opcache | awk '{print \$5}'\`
-touch \$PHP_ERROR_LOG
-chmod 0777 \$PHP_ERROR_LOG
-tail -F \$PHP_ERROR_LOG &
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/local/lib
-export PHP_INI_SCAN_DIR=/app/www
-
-echo "Launching PHP CLI"
-cd /app/www
-/app/php/bin/php -f /app/www/queue.php -c /app/www
-EOF
-
 chmod +x boot.sh
-chmod +x queue.sh
 
 # clean the cache
 rm -rf $CACHE_DIR/*
-
-
-echo "-----> LISTING MONGO.SO FOLDER AGAIN"
-ls /app/php/lib/php/extensions/no-debug-non-zts-20121212/
-
 
 # run a post build script from the app
 
