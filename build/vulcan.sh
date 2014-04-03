@@ -150,13 +150,13 @@ echo '9.3' > /app/pgsql/VERSION
 cp -a /app/apache /tmp/build/
 cp -a /app/php /tmp/build/
 cp -a /app/pgsql /tmp/build/
+cp -aL /app/local/lib/libpcre.so.1 /tmp/build/local/lib/
 # cp -aL /usr/lib/libmysqlclient.so.16 /tmp/build/local/lib/
 # cp -aL /app/local/lib/libhashkit.so.2 /tmp/build/local/lib/
-cp -aL /app/local/lib/libmcrypt.so.4 /tmp/build/local/lib/
+#cp -aL /app/local/lib/libmcrypt.so.4 /tmp/build/local/lib/
 #cp -aL /app/local/lib/libmemcached.so.11 /tmp/build/local/lib/
-cp -aL /app/local/lib/libpcre.so.1 /tmp/build/local/lib/
 # cp -aL /app/local/lib/libmemcachedprotocol.so.0 /tmp/build/local/lib/
 # cp -aL /app/local/lib/libmemcachedutil.so.2 /tmp/build/local/lib/
-cp -aL /app/local/lib/sasl2/*.so.2 /tmp/build/local/lib/sasl2/
+#cp -aL /app/local/lib/sasl2/*.so.2 /tmp/build/local/lib/sasl2/
 
 rm -rf /tmp/build/apache/manual/
