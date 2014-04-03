@@ -51,8 +51,10 @@ curl -L http://zlib.net/zlib-1.2.8.tar.gz -o /tmp/zlib-1.2.8.tar.gz
 # curl -L http://pecl.php.net/get/zip-1.10.2.tgz -o /tmp/zip-1.10.2.tgz
 echo "download PGSQL"
 curl -L http://ftp.postgresql.org/pub/source/v9.3.0/postgresql-9.3.0.tar.gz -o /tmp/postgresql-9.3.0.tar.gz
+#echo "libmcrypt"
+#curl -L http://pkgs.fedoraproject.org/repo/pkgs/libmcrypt/libmcrypt-2.5.7.tar.gz/b1be163143f8e8ed0474beeb642b3bad/libmcrypt-2.5.7.tar.gz -o /tmp/libmcrypt-2.5.7.tar.gz
 
-# tar -C /tmp -xzf /tmp/libmcrypt-2.5.7.tar.gz
+#tar -C /tmp -xzf /tmp/libmcrypt-2.5.7.tar.gz
 tar -C /tmp -xvzf /tmp/cyrus-sasl-2.1.25.tar.gz
 #tar -C /tmp -xvzf /tmp/libmemcached-1.0.16.tar.gz
 tar -C /tmp -xvzf /tmp/pcre-8.32.tar.gz
@@ -78,9 +80,9 @@ export LD_LIBRARY_PATH="/app/local/lib"
 # export MAKE="/usr/bin/make $MAKEFLAGS"
 export MAKE="/usr/bin/make"
 
-# cd /tmp/libmcrypt-2.5.7
-# ./configure --prefix=/app/local --disable-posix-threads --enable-dynamic-loading --enable-static-link
-# ${MAKE} && ${MAKE} install
+#cd /tmp/libmcrypt-2.5.7
+#./configure --prefix=/app/local --disable-posix-threads --enable-dynamic-loading --enable-static-link
+#${MAKE} && ${MAKE} install
 
 cd /tmp/zlib-1.2.8
 ./configure --prefix=/app/local --64
@@ -151,9 +153,9 @@ cp -a /app/apache /tmp/build/
 cp -a /app/php /tmp/build/
 cp -a /app/pgsql /tmp/build/
 cp -aL /app/local/lib/libpcre.so.1 /tmp/build/local/lib/
+cp -aL /app/local/lib/libmcrypt.so.4 /tmp/build/local/lib/
 # cp -aL /usr/lib/libmysqlclient.so.16 /tmp/build/local/lib/
 # cp -aL /app/local/lib/libhashkit.so.2 /tmp/build/local/lib/
-#cp -aL /app/local/lib/libmcrypt.so.4 /tmp/build/local/lib/
 #cp -aL /app/local/lib/libmemcached.so.11 /tmp/build/local/lib/
 # cp -aL /app/local/lib/libmemcachedprotocol.so.0 /tmp/build/local/lib/
 # cp -aL /app/local/lib/libmemcachedutil.so.2 /tmp/build/local/lib/
